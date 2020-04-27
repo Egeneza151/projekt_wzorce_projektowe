@@ -1,4 +1,7 @@
+import math
+
 def bubble_sort(tab): #zwraca posortowaną tablicę
+    """Sortowanie babelkowe"""
     for i in range(len(tab)):
         j=len(tab)-1 #od ostatniej komórki
         while j>i:   #do aktualnie szukanej jako najmniejsza
@@ -11,6 +14,7 @@ def bubble_sort(tab): #zwraca posortowaną tablicę
 
 
 def insertion_sort(data):
+    """Sortowanie przez wstawianie"""
     # dla kolejnych elementow
     for i in range(1, len(data)):
         key = data[i]
@@ -24,14 +28,15 @@ def insertion_sort(data):
 
 
 def selection_sort(y):
+    """Sortowanie przez wymiane/wybor"""
     for i, n in enumerate(y):
         j, m = min(enumerate(y[i:]), key = lambda a: a[1])
         y[j + i], y[i] = n, m
     return y
 
 
-
 def quick_sort(L):
+    """Sortowanie szybkie"""
     if len(L) <= 1:
         return L
         # pobieranie pivota wg ktorego bedzimey operowac
@@ -59,12 +64,8 @@ def quick_sort(L):
     return quick_sort(less) + equal + quick_sort(greater)
 
 
-
-
-
 def heap_sort(L):
-    """Sortowanie Heap sort"""
-
+    """Sortowanie stogowe"""
     # budowanie kopca
     #print("[LOG] Budowanie kopca")
     for start in range(int((len(L) - 2) / 2), -1, -1):
@@ -96,7 +97,8 @@ def shiftdown(lst, start, end):
             break
 
 
-def counting_sort(array):
+def counting_sort(array,maxValue):
+    """Sortowanie przez zliczanie"""
     size = len(array)
     output = [0] * size
 
@@ -108,7 +110,7 @@ def counting_sort(array):
         count[array[i]] += 1
 
     # Store the cummulative count
-    for i in range(1, 10):
+    for i in range(1, maxValue):
         count[i] += count[i - 1]
 
     # Find the index of each element of the original array in count array
@@ -122,18 +124,14 @@ def counting_sort(array):
     # Copy the sorted elements into original array
     for i in range(0, size):
         array[i] = output[i]
-
-
-
+    return array
 
 
 def merge(L, start, center, finish):
     """Operacja scalania"""
     i = start
     j = center + 1
-
     L2 = []  # lista pomocnicza
-
     # wybieraj odpowiednie elementy z dwoch tablic
     while (i <= center) and (j <= finish):
         if L[j] < L[i]:
@@ -159,26 +157,33 @@ def merge(L, start, center, finish):
     while i < s:
         L[start + i] = L2[i]
         i = i + 1
-
     return L
 
 
 # sortowanie przez scalanie
-def merge_sort(L, start, finish):
+def merge_me(L, start, finish):
+    """Rekruencyjne scalanie"""
     if start != finish:
         # dzielimy dablice do konca
         center = int(math.floor((start + finish) / 2))
         # na lewo
-        merge_sort(L, start, center)
+        merge_me(L, start, center)
         # na prawo
-        merge_sort(L, center + 1, finish)
+        merge_me(L, center + 1, finish)
 
         # operacja scalania
         merge(L, start, center, finish)
     return L
 
 
-
+def merge_sort(L, zakres = 0):
+    """Sortowanie przez scalanie"""
+    if zakres != 0:
+        dl = zakres
+    else:
+        dl = len(L)
+        dl = dl - 1
+    return merge_me(L,0,dl)
 
 
 def malejaco(n):#DONE - quick, heap, counting, merge TODO: bubble, insertion, selection
