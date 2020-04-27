@@ -1,7 +1,3 @@
-
-
-
-
 def bubble_sort(tab): #zwraca posortowaną tablicę
     for i in range(len(tab)):
         j=len(tab)-1 #od ostatniej komórki
@@ -14,25 +10,24 @@ def bubble_sort(tab): #zwraca posortowaną tablicę
     return tab
 
 
-
-
 def insertion_sort(data):
-    #dla kolejnych elementow
+    # dla kolejnych elementow
     for i in range(1, len(data)):
         key = data[i]
         j = 0
-        #poszukaj miejsce gdzie wstawic aktualny element
-        while key > data[j] and j<i:
+        # poszukaj miejsce gdzie wstawic aktualny element
+        while key > data[j] and j < i:
             j += 1
-        data.insert(j, key) #wstaw element w znalezione miejsce
-        del data[i+1] #usun element - wstawilismy element na miejsce (stworzylismy jego kopie, usun oryginal)
+        data.insert(j, key)  # wstaw element w znalezione miejsce
+        del data[i + 1]  # usun element - wstawilismy element na miejsce (stworzylismy jego kopie, usun oryginal)
+    return data
+
 
 def selection_sort(y):
     for i, n in enumerate(y):
         j, m = min(enumerate(y[i:]), key = lambda a: a[1])
         y[j + i], y[i] = n, m
-    return y    #example:print selection_sort([2,6,1,9,4,3]);
-
+    return y
 
 
 
@@ -71,13 +66,13 @@ def heap_sort(L):
     """Sortowanie Heap sort"""
 
     # budowanie kopca
-    print("[LOG] Budowanie kopca")
+    #print("[LOG] Budowanie kopca")
     for start in range(int((len(L) - 2) / 2), -1, -1):
         shiftdown(L, start, len(L) - 1)
 
     # sortowanie
     for end in range(len(L) - 1, 0, -1):
-        print("[LOG] Zamiana: " + str(L[end]) + " z " + str(L[0]))
+        #print("[LOG] Zamiana: " + str(L[end]) + " z " + str(L[0]))
         L[end], L[0] = L[0], L[end]  # swap
         shiftdown(L, 0, end - 1)  # przywracanie wlasnosci kopca
     return L
@@ -87,8 +82,8 @@ def heap_sort(L):
 def shiftdown(lst, start, end):
     """Metoda do produkcji kopca"""
     root = start
-    print("[LOG] Przywracanie wlasnosci kopca")
-    print("[LOG] Ustalamy korzen: " + str(root))
+    #print("[LOG] Przywracanie wlasnosci kopca")
+    #print("[LOG] Ustalamy korzen: " + str(root))
     while True:
         child = root * 2 + 1
         if child > end: break
@@ -101,26 +96,32 @@ def shiftdown(lst, start, end):
             break
 
 
-def counting_sort(L):
-    """Sortowanie counting sort"""
-    tab_pom = []
+def counting_sort(array):
+    size = len(array)
+    output = [0] * size
 
-    print("[LOG] Tworzenie tablicy pomocniczej")
-    for i in range(0, len(L)):
-        tab_pom.append(0);
+    # Initialize count array
+    count = [0] * maxValue
 
-    print("[LOG] zliczanie poszczegolnych lementow")
-    for a in L:
-        print("[LOG] zliczono element: " + str(a))
-        tab_pom[a] = tab_pom[a] + 1
+    # Store the count of each elements in count array
+    for i in range(0, size):
+        count[array[i]] += 1
 
-    print("[LOG] Ukladanie posortoanej tablicy")
-    k = 0  # index tablicy
-    for a in range(0, len(L)):
-        for c in range(0, tab_pom[a]):
-            L[k] = a
-            k = k + 1
-    return L
+    # Store the cummulative count
+    for i in range(1, 10):
+        count[i] += count[i - 1]
+
+    # Find the index of each element of the original array in count array
+    # place the elements in output array
+    i = size - 1
+    while i >= 0:
+        output[count[array[i]] - 1] = array[i]
+        count[array[i]] -= 1
+        i -= 1
+
+    # Copy the sorted elements into original array
+    for i in range(0, size):
+        array[i] = output[i]
 
 
 
@@ -164,7 +165,6 @@ def merge(L, start, center, finish):
 
 # sortowanie przez scalanie
 def merge_sort(L, start, finish):
-    """sortowanie merge sort"""
     if start != finish:
         # dzielimy dablice do konca
         center = int(math.floor((start + finish) / 2))
