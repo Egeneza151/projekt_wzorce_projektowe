@@ -4,32 +4,33 @@ def main():
     lista = [1,5,2,1,7,12,2,9,1]
     print("Standard",lista)
 
-    sortedBubble = my.bubble_sort(lista)
-    print("Bubble: ",sortedBubble)
+    sortedBubble = my.BubbleSort(lista)
+    print("Bubble: ",sortedBubble.asc())
 
     lista = [1, 5, 2, 1, 7, 12, 2, 9, 1]
-    sortedInsertion = my.insertion_sort(lista)
-    print("Insertion",sortedInsertion)
+    sortedInsertion = my.InsertionSort(lista)
+    print("Insertion",sortedInsertion.asc())
 
     lista = [1, 5, 2, 1, 7, 12, 2, 9, 1]
-    sortedSelection = my.selection_sort(lista)
-    print("Selection", sortedSelection)
+    sortedSelection = my.SelectionSort(lista)
+    print("Selection", sortedSelection.asc())
 
     lista = [1, 5, 2, 1, 7, 12, 2, 9, 1]
-    sortedQuick = my.quick_sort(lista)
-    print("Quick", sortedQuick)
+    sortedQuick = my.QuickSort(lista)
+    print("Quick", sortedQuick.asc())
 
     lista = [1, 5, 2, 1, 7, 12, 2, 9, 1]
-    sortedHeap = my.heap_sort(lista)
-    print("Heap", sortedHeap)
+    sortedHeap = my.HeapSort(lista)
+    print("Heap", sortedHeap.asc())
 
     lista = [1, 5, 2, 1, 7, 12, 2, 9, 1]
-    sortedCouting = my.counting_sort(lista,15)
-    print("Couting", sortedCouting)
+    sortedCouting = my.CoutingSort(lista,15)
+    print("Couting", sortedCouting.asc())
 
     lista = [1, 5, 2, 1, 7, 12, 2, 9, 1]
-    sortedMerge = my.merge_sort(lista)
-    print("Merge", sortedMerge)
+    sortedMerge = my.MergeSort(lista)
+    #sortedMerge = my.malejaco(sortedMerge)
+    print("Merge", sortedMerge.asc())
 
 if __name__ == "__main__":
     main()
