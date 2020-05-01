@@ -1,10 +1,22 @@
 import math
 from abc import ABCMeta, abstractmethod
 
+#KLASA ADAPTER - zapewnia inny interfejs dla klas(trzeba bedzie wykrzystac klasy niepowiazane ze soba)
+class Adapter:
+    def __init__(self, obj, **adapted_methods):
+        self.obj = obj
+        self.__dict__.update(adapted_methods)
+
+    def __getattr__(self, attr):
+        return getattr(self.obj, attr)
+
+    def original_dict(self):
+        return self.obj.__dict__
+
+#KLASA PRZODKA SORTOWANIA
 class Sorting:
-    @abstractmethod
-    def returnList(self):
-        pass
+    def __init__(self):
+        self._observers = []
 
     def asc(self):#rosnaco
         return self.tab
@@ -16,11 +28,35 @@ class Sorting:
             temp.append(self.tab[dl-i-1])
         return temp
 
+    def isInteger(self, tab):#jesli w tablicy jest string zamienia go na 0
+        for i in range(len(tab)):
+            isString = type(tab[i]) == str
+            if (isString == True):
+                tab[i] = 0
+        return tab
+
+    def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
+
+    def detach(self, observer):
+        try:
+            self._observers.remove(observer)
+        except ValueError:
+            pass
+
+    def notify(self, modifier=None):
+        for observer in self._observers:
+            if modifier != observer:
+                observer.update(self)
+
+#KLASY SORTOWANIA
 class BubbleSort(Sorting):
     def __init__(self, tab):
+        Sorting.__init__(self)
         self.tab = tab
+        self.tab = self.isInteger(self.tab)
         self.tab = self.bubble_sort(self.tab)
-        self.returnList()
 
     def bubble_sort(self, tab): #zwraca posortowaną tablicę
         """Sortowanie babelkowe"""
@@ -37,9 +73,10 @@ class BubbleSort(Sorting):
 
 class InsertionSort(Sorting):
     def __init__(self, tab):
+        Sorting.__init__(self)
         self.tab = tab
+        self.tab = self.isInteger(self.tab)
         self.tab = self.insertion_sort(self.tab)
-        self.returnList()
 
     def insertion_sort(self,tab):
         """Sortowanie przez wstawianie"""
@@ -57,9 +94,10 @@ class InsertionSort(Sorting):
 
 class SelectionSort(Sorting):
     def __init__(self, tab):
+        Sorting.__init__(self)
         self.tab = tab
+        self.tab = self.isInteger(self.tab)
         self.tab = self.selection_sort(self.tab)
-        self.returnList()
 
     def selection_sort(self, tab):
         """Sortowanie przez wymiane/wybor"""
@@ -71,9 +109,10 @@ class SelectionSort(Sorting):
 
 class QuickSort(Sorting):
     def __init__(self, tab):
+        Sorting.__init__(self)
         self.tab = tab
+        self.tab = self.isInteger(self.tab)
         self.tab = self.quick_sort(self.tab)
-        self.returnList()
 
     def quick_sort(self, tab):
         """Sortowanie szybkie"""
@@ -106,9 +145,10 @@ class QuickSort(Sorting):
 
 class HeapSort(Sorting):
     def __init__(self, tab):
+        Sorting.__init__(self)
         self.tab = tab
+        self.tab = self.isInteger(self.tab)
         self.tab = self.heap_sort(self.tab)
-        self.returnList()
 
     def heap_sort(self, tab):
         """Sortowanie stogowe"""
@@ -144,10 +184,12 @@ class HeapSort(Sorting):
 
 class CoutingSort(Sorting):
     def __init__(self, tab, maxValue):
+        Sorting.__init__(self)
         self.tab = tab
         self.maxValue = maxValue
+        self.tab = self.isInteger(self.tab)
         self.tab = self.counting_sort(self.tab, self.maxValue)
-        self.returnList()
+
     def counting_sort(self, tab, maxValue):
         """Sortowanie przez zliczanie"""
         size = len(tab)
@@ -180,9 +222,10 @@ class CoutingSort(Sorting):
 
 class MergeSort(Sorting):
     def __init__(self, tab, zakres = 0):
+        Sorting.__init__(self)
         self.tab = tab
+        self.tab = self.isInteger(self.tab)
         self.tab = self.merge_sort(self.tab)
-        self.returnList()
 
     def merge(self, tab, start, center, finish):
         """Operacja scalania"""
@@ -239,7 +282,22 @@ class MergeSort(Sorting):
             dl = len(tab)
             dl = dl - 1
         return self.merge_me(tab,0,dl)
+#END KLASY SORTOWANIA
+#OBSERWATORZY
+class HexViewer:
+    def update(self, sorting):
+        print("HEX VIEWER:",[hex(x) for x in sorting.tab])
 
+
+class DecimalViewer:
+    def update(self, sorting):
+        print("DECIMAL VIEWER:",sorting.tab)
+
+
+class OctalViewer:
+    def update(self, sorting):
+        print("OCTAL VIEWER:",[oct(x) for x in sorting.tab])
+#END OBSERWATORZY
 
 #ADD: Obserwer - zbieranie logow z uzywania algorytmow
 #ADD Fasada - dzielenie logiki od biznesu(w tym przypadku wywolanie jakiejs prywatnej metody)
