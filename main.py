@@ -57,8 +57,39 @@ def main():
     print("Listy w klasie adapter:")
     for obj in objects:
         print("{0}".format(obj.tab))
-        print(obj.original_dict())
+        print("Właściwości",obj.original_dict())
     #END ADAPTER
+
+    #FASADA
+    fasada = my.SortingTime(lista, 15)
+    fasada.show_time()
+    #END FASADA
+
+    #ALGORYTMY ARYTMETYCZNE
+    alg_arytm = my.AlgorytmyArytmetyczne()
+    silnia_rek = alg_arytm.silnia_rek(20)
+    print(silnia_rek)
+    silnia_iter = alg_arytm.silnia_iter(20)
+    print(silnia_iter)
+    fibo = alg_arytm.fib(10)
+    print(fibo)
+    nws1 = alg_arytm.nws_v1(10,15)
+    print(nws1)
+    nws2 = alg_arytm.nws_v2(10, 15)
+    print(nws2)
+    nww = alg_arytm.nww(10, 15)
+    print(nww)
+    sito = alg_arytm.sito(100)
+    print(sito)
+    fme = alg_arytm.fme(3, 2, 3)#fast modular exponentiation
+    print(fme)
+    rozklad = alg_arytm.rozklad(2136)
+    print(rozklad)
+    newton = alg_arytm.Newton(40, 37)
+    print(newton)
+    #print(fermat)
+    #END ALGORYTMY ARYTMETYCZNE
+
 
 
 

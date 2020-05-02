@@ -1,5 +1,7 @@
 import math
 from abc import ABCMeta, abstractmethod
+import time
+import random
 
 #KLASA ADAPTER - zapewnia inny interfejs dla klas(trzeba bedzie wykrzystac klasy niepowiazane ze soba)
 class Adapter:
@@ -283,6 +285,127 @@ class MergeSort(Sorting):
             dl = dl - 1
         return self.merge_me(tab,0,dl)
 #END KLASY SORTOWANIA
+
+#KLASY ALGORYTMOW ARYTMETYCZNYCH
+class AlgorytmyArytmetyczne:
+    def silnia_rek(self, n):
+        """Obliczanie silni rekurencyjnie"""
+        if n > 1:
+            return n * self.silnia_rek(n - 1)  # wywolanie rekurencyjne funkcji
+        elif n in (0, 1):
+            return 1;
+
+    def silnia_iter(self, n):
+        """Obliczanie silni iteracyjnie"""
+        silnia_tmp = 1  # zmienna pomocnicza
+        if n in (0, 1):  # gdy n = 0 lub 1 zwroc 1
+            return 1
+        else:
+            for i in range(2, n + 1):  # gdy n>1 mnoz przez kolejne liczby od 2 do n
+                silnia_tmp = silnia_tmp * i
+            return silnia_tmp
+
+    def fib(self, number):
+        """Obliczanie ciagu fibonaciego"""
+        new = 0
+        self.numbers = [0, 1]
+        for i in range(number):  # dla kolejnych 50 liczb z ciagu fibonnaciego
+            new = self.numbers[-1] + self.numbers[-2]  # oblicz kolejny wyraz ciagu jako sume dwoch ostatnich
+            self.numbers.append(new)  # dodaj nowy wyraz ciagu do listy
+        return new
+
+    def nws_v1(self, num1, num2):
+        """Algorytm euklidesa"""
+        while num2 != 0:
+            res = num1 % num2
+            num1 = num2
+            num2 = res
+        return num1
+
+    def nws_v2(self, num1, num2):
+        """Algorytm euklidesa"""
+        while num1 != num2:
+            if num1 < num2:
+                num2 -= num1
+            else:
+                num1 -= num2
+        return num1
+
+    def nww(self, num1, num2):
+        """Najmniejsza wspolna wielokrotnosc"""
+        return abs(num1 * num2 / self.nws_v1(num1, num2))
+
+    # tworzy tablice z wartosciami od "od" (wlacznie) do "do" (wlacznie)
+    #wykorzystuje w sito eratostenesa
+    def od_do(self, od, do):
+        zw = []
+        while od != do + 1:
+            zw.append(od)
+            od += 1
+        return zw
+
+    #dla liczb od 1 do "do"
+    def sito(self, do):
+        """Sito eratostenesa"""
+        sq = int(math.sqrt(do))  # gorny zakres dzialania algorytmu
+        obecnie = 1  # wartosc poczatkowa
+        tab = self.od_do(1, do)  # utworz tablice z wartosciami od 1 do "do"
+        while True:
+            if obecnie > sq:  # warunek zakonczenia dzialania algorytmu
+                return tab
+
+            for i in tab:  # dla wszystkich liczb w tablicy
+                # usun element jezeli jest podzielny przez obecna liczbe
+                if (not (i % obecnie) and not (obecnie == i)) and obecnie != 1:
+                    tab.remove(i)
+
+            i = tab.index(obecnie) + 1
+            obecnie = tab[i]
+
+    #modular exponentiation a ** k mod n
+    def fme(self, a, k, n):
+        """Szybkie potegowanie modularne"""
+        b = bin(k)[2:]  # list of bits
+        m = len(b)
+        r = 1  # result
+        x = a % n
+
+        for i in range(m - 1, -1, -1):
+            if b[i] == '1':
+                r = r * x % n
+
+            x **= 2
+            x %= n
+
+        return r
+
+    def rozklad(self, x):
+        """Rozklad liczby na czynniki pierwsze"""
+        if x<=0:
+            return 0
+        i=2
+        e=math.floor(math.sqrt(x))
+        r=[] #używana jest tablica (lista), nie bepośrednie wypisywanie
+        while i<=e:
+            if x%i==0:
+                r.append(i)
+                x/=i
+                e=math.floor(math.sqrt(x))
+            else:
+                i+=1
+        if x>1: r.append(x)
+        return r
+
+    def Newton(self, n, k ):
+        """Obliczanie symbolu Newtona"""
+        Wynik = 1
+        if k == 0 or k == n:
+            return Wynik
+        for i in range( 1, k+1 ):
+            Wynik = Wynik * ( n - i + 1 ) / i
+        return Wynik
+
+
 #OBSERWATORZY
 class HexViewer:
     def update(self, sorting):
@@ -298,6 +421,35 @@ class OctalViewer:
     def update(self, sorting):
         print("OCTAL VIEWER:",[oct(x) for x in sorting.tab])
 #END OBSERWATORZY
+#FASADA
+class SortingTime:
+    def __init__(self, tab, maxValue):
+        self.start = time.time()
+        self.Bubble = BubbleSort(tab)
+        self.sB = time.time()
+        self.Insertion = InsertionSort(tab)
+        self.sI = time.time()
+        self.Selection = SelectionSort(tab)
+        self.sS = time.time()
+        self.Quick = QuickSort(tab)
+        self.sQ = time.time()
+        self.Heap = HeapSort(tab)
+        self.sH = time.time()
+        self.Couting = CoutingSort(tab, maxValue)
+        self.sC = time.time()
+        self.Merge = MergeSort(tab)
+        self.sM = time.time()
+
+    def show_time(self):
+        print("Bubble -",self.sB - self.start)
+        print("Insertion -",self.sI - self.sB)
+        print("Selection -",self.sS - self.sI)
+        print("Quick -",self.sQ - self.sS)
+        print("Heap -",self.sH - self.sQ)
+        print("Couting -",self.sC - self.sH)
+        print("Merge -",self.sM - self.sC)
+#END FASADA
 
 #ADD: Obserwer - zbieranie logow z uzywania algorytmow
+#ADD Adapter - zapewnia inny interfejs dla klas
 #ADD Fasada - dzielenie logiki od biznesu(w tym przypadku wywolanie jakiejs prywatnej metody)
