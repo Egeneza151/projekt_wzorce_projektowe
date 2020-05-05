@@ -19,6 +19,7 @@ class Adapter:
 class Sorting:
     def __init__(self):
         self._observers = []
+        self._sort_state = None
 
     def asc(self):#rosnaco
         return self.tab
@@ -396,7 +397,7 @@ class AlgorytmyArytmetyczne:
         if x>1: r.append(x)
         return r
 
-    def Newton(self, n, k ):
+    def Newton(self, n, k):
         """Obliczanie symbolu Newtona"""
         Wynik = 1
         if k == 0 or k == n:
@@ -407,20 +408,27 @@ class AlgorytmyArytmetyczne:
 
 
 #OBSERWATORZY
-class HexViewer:
+class Viewer:
+    @abstractmethod
+    def update(self, arg):
+        pass
+
+
+class HexViewer(Viewer):
     def update(self, sorting):
         print("HEX VIEWER:",[hex(x) for x in sorting.tab])
 
 
-class DecimalViewer:
+class DecimalViewer(Viewer):
     def update(self, sorting):
         print("DECIMAL VIEWER:",sorting.tab)
 
 
-class OctalViewer:
+class OctalViewer(Viewer):
     def update(self, sorting):
         print("OCTAL VIEWER:",[oct(x) for x in sorting.tab])
 #END OBSERWATORZY
+
 #FASADA
 class SortingTime:
     def __init__(self, tab, maxValue):
@@ -449,6 +457,49 @@ class SortingTime:
         print("Couting -",self.sC - self.sH)
         print("Merge -",self.sM - self.sC)
 #END FASADA
+
+class SortBuilder:
+    def __init__(self):
+        self.reset()
+
+    @property
+    def bubble_sort(self):
+        bubble_sort = self._bubble_sort
+        return bubble_sort
+
+    @property
+    def bubble_insertion(self):
+        bubble_insertion = self._bubble_insertion
+        return bubble_insertion
+
+    @property
+    def bubble_selection(self):
+        bubble_selection = self._bubble_selection
+        return bubble_selection
+
+    @property
+    def bubble_quick(self):
+        bubble_quick = self._bubble_quick
+        return bubble_quick
+
+    @property
+    def bubble_heap(self):
+        bubble_heap = self._bubble_heap
+        return bubble_heap
+
+    @property
+    def bubble_counting(self):
+        bubble_counting = self._bubble_counting
+        return bubble_counting
+
+    @property
+    def bubble_merge(self):
+        bubble_merge = self._bubble_merge
+        return bubble_merge
+
+class DirectorBuilder:
+    pass
+
 
 #ADD: Obserwer - zbieranie logow z uzywania algorytmow
 #ADD Adapter - zapewnia inny interfejs dla klas

@@ -38,6 +38,7 @@ def main():
     view3 = my.OctalViewer()
 
     #OBSERWATOR
+    print("Obserwator")
     sortedBubble.attach(view1)#dodanie do obserwatora
     sortedBubble.attach(view2)
     sortedInsertion.attach(view1)
