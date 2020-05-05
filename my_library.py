@@ -458,9 +458,11 @@ class SortingTime:
         print("Merge -",self.sM - self.sC)
 #END FASADA
 
+#BUILDER
 class SortBuilder:
-    def __init__(self):
-        self.reset()
+    def __init__(self):#, tab, maxValue, zakres = 0
+        #self.create_all(tab, maxValue, zakres)
+        pass
 
     @property
     def bubble_sort(self):
@@ -468,39 +470,91 @@ class SortBuilder:
         return bubble_sort
 
     @property
-    def bubble_insertion(self):
-        bubble_insertion = self._bubble_insertion
-        return bubble_insertion
+    def insertion_sort(self):
+        insertion_sort = self._insertion_sort
+        return insertion_sort
 
     @property
-    def bubble_selection(self):
-        bubble_selection = self._bubble_selection
-        return bubble_selection
+    def selection_sort(self):
+        selection_sort = self._selection_sort
+        return selection_sort
 
     @property
-    def bubble_quick(self):
-        bubble_quick = self._bubble_quick
-        return bubble_quick
+    def quick_sort(self):
+        quick_sort = self._quick_sort
+        return quick_sort
 
     @property
-    def bubble_heap(self):
-        bubble_heap = self._bubble_heap
-        return bubble_heap
+    def heap_sort(self):
+        heap_sort = self._heap_sort
+        return heap_sort
 
     @property
-    def bubble_counting(self):
-        bubble_counting = self._bubble_counting
-        return bubble_counting
+    def counting_sort(self):
+        counting_sort = self._counting_sort
+        return counting_sort
 
     @property
-    def bubble_merge(self):
-        bubble_merge = self._bubble_merge
-        return bubble_merge
+    def merge_sort(self):
+        merge_sort = self._merge_sort
+        return merge_sort
+
+    def create_all(self, tab, maxValue, zakres):
+        self._bubble_sort = BubbleSort(tab)
+        self._insertion_sort = InsertionSort(tab)
+        self._selection_sort = SelectionSort(tab)
+        self._quick_sort = QuickSort(tab)
+        self._heap_sort = HeapSort(tab)
+        self._counting_sort = CoutingSort(tab, maxValue)
+        self._merge_sort = MergeSort(tab, zakres)
+
+    def random_sort(self, tab, maxValue, zakres):
+        self.random = random.randint(1,7)
+        if(self.random == 1):
+            self._bubble_sort = BubbleSort(tab)
+            print("BS")
+        elif(self.random == 2):
+            self._insertion_sort = InsertionSort(tab)
+            print("IS")
+        elif (self.random == 3):
+            self._selection_sort = SelectionSort(tab)
+            print("SS")
+        elif (self.random == 4):
+            self._quick_sort = QuickSort(tab)
+            print("QS")
+        elif (self.random == 5):
+            self._heap_sort = HeapSort(tab)
+            print("HS")
+        elif (self.random == 6):
+            self._counting_sort = CoutingSort(tab, maxValue)
+            print("CS")
+        elif (self.random == 7):
+            self._merge_sort = MergeSort(tab, zakres)
+            print("MS")
 
 class DirectorBuilder:
-    pass
+    def __init__(self, tab, maxValue, zakres = 0):
+        self.tab = tab
+        self.maxValue = maxValue
+        self.zakres = zakres
+        self._builder = None
 
+    @property
+    def builder(self):
+        return self._builder
+
+    @builder.setter
+    def builder(self, builder):
+        self._builder = builder
+
+    def build_sorting(self):
+        self._builder.create_all(self.tab, self.maxValue, self.zakres)
+
+    def build_random(self):
+        self._builder.random_sort(self.tab, self.maxValue, self.zakres)
+#END BUILDER
 
 #ADD: Obserwer - zbieranie logow z uzywania algorytmow
 #ADD Adapter - zapewnia inny interfejs dla klas
 #ADD Fasada - dzielenie logiki od biznesu(w tym przypadku wywolanie jakiejs prywatnej metody)
+#ADD Builder - "wybrane" tworzenie obiektow

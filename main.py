@@ -91,7 +91,16 @@ def main():
     #print(fermat)
     #END ALGORYTMY ARYTMETYCZNE
 
+    #BUILDER
+    lista_to_build = [2,1,3,7,8,4,2,1]
+    director = my.DirectorBuilder(lista_to_build, 100)
+    builder = my.SortBuilder()
+    director.builder = builder
 
+    director.build_sorting()
+    #director.build_random()
+    print(builder.counting_sort.asc())
+    #END BUILDER
 
 
 
